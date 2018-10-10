@@ -6,7 +6,7 @@
 /*   By: trecomps <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/20 11:42:37 by trecomps          #+#    #+#             */
-/*   Updated: 2018/09/20 15:38:09 by trecomps         ###   ########.fr       */
+/*   Updated: 2018/10/10 12:23:21 by trecomps         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ void			Mesh::setupMesh(void)
 	glBindVertexArray(this->_vao);
 	glBindBuffer(GL_ARRAY_BUFFER, this->_vbo);
 
-	glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(Vertex), &_vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, this->_vertices.size() * sizeof(Vertex), &this->_vertices[0], GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->_ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(unsigned int),
-		&_indices[0], GL_STATIC_DRAW);
+		&this->_indices[0], GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
@@ -79,13 +79,13 @@ void			Mesh::draw(const Shader &shader)
 		if (name == "texture_specular")
 			number = std::to_string(specularNr++);
 		i++;
-		shader.setUniform(("material." + name + number).c_str(), i);
+		shader.setUniform(("material_" + name + number).c_str(), i);
 		glBindTexture(GL_TEXTURE_2D, this->_textures[i].id);
 	}
-	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(this->_vao);
 	glDrawElements(GL_TRIANGLES, this->_indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+	glActiveTexture(GL_TEXTURE0);
 }
 
 unsigned int				Mesh::getVao(void) const
@@ -130,4 +130,21 @@ Mesh			&Mesh::operator=(Mesh const &rhs)
 		this->_textures = rhs.getTextures();
 	}
 	return (*this);
+}
+
+std::ostream	&Mesh::printVertices(std::ostream &o) const
+{
+	unsigned int			i;
+
+	i = 0;
+	while (i < this->_vertices.size())
+	{
+		o << this->_vertices[i].Position[0] << "\t"
+			<< this->_vertices[i].Position[1] << "\t"
+			<< this->_vertices[i].Position[2] << "\t"
+			<< std::endl;
+		i++;
+	}
+
+	return (o);
 }

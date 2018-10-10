@@ -6,7 +6,7 @@
 /*   By: trecomps <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/20 10:29:27 by trecomps          #+#    #+#             */
-/*   Updated: 2018/09/20 19:09:21 by trecomps         ###   ########.fr       */
+/*   Updated: 2018/10/04 11:53:59 by trecomps         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,14 +145,38 @@ void					Shader::setUniform(const std::string &name, float value) const
 		std::cout << "Program not in use" << std::endl;
 }
 
+void					Shader::setUniform(const std::string &name, glm::mat4 value) const
+{
+	if (this->_inUse == 1)
+	{
+		glUniformMatrix4fv(glGetUniformLocation(this->_id, name.c_str()), 1,
+				GL_FALSE, glm::value_ptr(value));
+	}
+	else
+		std::cout << "Program not in use" << std::endl;
+}
+
 unsigned int			Shader::get_id(void) const
 {
 	return (this->_id);
 }
 
+std::string				Shader::getVShaderCode() const
+{
+	return (this->_vShaderCode);
+}
+
+std::string				Shader::getFShaderCode() const
+{
+	return (this->_fShaderCode);
+}
+
 std::ostream	&operator<<(std::ostream &o, Shader const &i)
 {
-	o << "Shader id: " << i.get_id();
+	o << "Shader id: " << i.get_id() << std::endl <<
+		"Vertex shader :" << std::endl << i.getVShaderCode() <<
+		std::endl << std::endl <<
+		"Fragment shader :" << std::endl << i.getFShaderCode() << std::endl;
 
 	return (o);
 }

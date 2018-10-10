@@ -6,7 +6,7 @@
 /*   By: trecomps <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/20 11:42:06 by trecomps          #+#    #+#             */
-/*   Updated: 2018/09/20 15:34:01 by trecomps         ###   ########.fr       */
+/*   Updated: 2018/10/10 10:37:20 by trecomps         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ public :
 	std::vector<Vertex>			getVertices(void) const;
 	std::vector<unsigned int>	getIndices(void) const;
 	std::vector<Texture>		getTextures(void) const;
+	std::ostream				&printVertices(std::ostream &o) const;
 
 	void		draw(const Shader &shader);
 
@@ -49,6 +50,9 @@ private :
 	std::vector<Vertex>			_vertices;
 	std::vector<unsigned int>	_indices;
 	std::vector<Texture>		_textures;
+	GLuint						_positionsAttrib;
+	GLuint						_normalsAttrib;
+	GLuint						_texturesAttrib;
 };
 
 #endif

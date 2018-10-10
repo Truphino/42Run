@@ -6,19 +6,37 @@
 /*   By: trecomps <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/20 14:49:25 by trecomps          #+#    #+#             */
-/*   Updated: 2018/09/20 19:23:34 by trecomps         ###   ########.fr       */
+/*   Updated: 2018/10/10 13:02:26 by trecomps         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Model.class.hpp"
 #include "stb.hpp"
 
-Model::Model(SDL_Window *win, char *path)
+Model::Model(char *path) :
+	_translate(glm::vec3(0, 0, 0)),
+	_scale(glm::vec3(1, 1, 1)),
+	_rotation(glm::vec3(0, 0, 0)),
+	_model_matrix(glm::mat4(1.f))
 {
 	loadModel(path);
-	this->_win = win;
 
 	return ;
+}
+
+std::ostream		&Model::printVertices(std::ostream &o) const
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < this->_meshes.size())
+	{
+		this->_meshes[i].printVertices(o);
+		o << std::endl << std::endl;
+		i++;
+	}
+
+	return (o);
 }
 
 void		Model::draw(const Shader &shader)
@@ -26,12 +44,12 @@ void		Model::draw(const Shader &shader)
 	unsigned int	i;
 
 	i = 0;
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	while (i < this->_meshes.size())
 	{
 		this->_meshes[i].draw(shader);
 		i++;
 	}
-	SDL_GL_SwapWindow(this->_win);
 }
 
 void		Model::loadModel(std::string path)
@@ -68,6 +86,32 @@ void		Model::processNode(aiNode *node, const aiScene *scene)
 		processNode(node->mChildren[i], scene);
 		i++;
 	}
+}
+
+Mesh		Model::processMesh(aiMesh *mesh, const aiScene *scene)
+{
+	std::vector<Vertex>			vertices;
+	std::vector<unsigned int>	indices;
+	std::vector<Texture>		textures;
+	unsigned int				i;
+
+	i = 0;
+	while (i < mesh->mNumVertices)
+	{
+		loadVertex(vertices, mesh, i);
+		i++;
+	}
+	i = 0;
+	while (i < mesh->mNumFaces)
+	{
+		loadIndices(indices, mesh, i);
+		i++;
+	}
+	if (mesh->mMaterialIndex > 0)
+	{
+		loadMaterial(textures, mesh, scene);
+	}
+	return Mesh(vertices, indices, textures);
 }
 
 void		Model::loadVertex(std::vector<Vertex> &vertex, aiMesh *mesh, unsigned int i)
@@ -188,30 +232,28 @@ unsigned int Model::textureFromFile(const char *path, const std::string &directo
 	return textureID;
 }
 
-Mesh		Model::processMesh(aiMesh *mesh, const aiScene *scene)
+void			Model::setTransformations(glm::vec3 const &translation,
+											glm::vec3 const &scale,
+											glm::vec3 const &rotation)
 {
-	std::vector<Vertex>			vertices;
-	std::vector<unsigned int>	indices;
-	std::vector<Texture>		textures;
-	unsigned int				i;
+	this->_translate = translation;
+	this->_scale = scale;
+	this->_rotation = rotation;
+}
 
-	i = 0;
-	while (i < mesh->mNumVertices)
-	{
-		loadVertex(vertices, mesh, i);
-		i++;
-	}
-	i = 0;
-	while (i < mesh->mNumFaces)
-	{
-		loadIndices(indices, mesh, i);
-		i++;
-	}
-	if (mesh->mMaterialIndex > 0)
-	{
-		loadMaterial(textures, mesh, scene);
-	}
-	return Mesh(vertices, indices, textures);
+void			Model::buildModelMatrix(void)
+{
+	glm::mat4	tmp_matrix(1.f);
+
+	tmp_matrix = glm::translate(tmp_matrix, this->_translate);
+	tmp_matrix = glm::scale(tmp_matrix, this->_scale);
+
+	this->_model_matrix = tmp_matrix;
+}
+
+glm::mat4 const	&Model::getModelMatrix(void) const
+{
+	return(this->_model_matrix);
 }
 
 Model::~Model(void)

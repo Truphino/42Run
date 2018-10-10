@@ -6,7 +6,7 @@
 /*   By: trecomps <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/20 14:48:30 by trecomps          #+#    #+#             */
-/*   Updated: 2018/09/20 19:20:21 by trecomps         ###   ########.fr       */
+/*   Updated: 2018/10/10 13:02:24 by trecomps         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,16 @@ class Model {
 
 public :
 
-	Model(SDL_Window *win, char *path);
+	Model(char *path);
 	~Model(void);
 
 	void		draw(const Shader &shader);
+	void		setTransformations(glm::vec3 const &translation,
+									glm::vec3 const &scale,
+									glm::vec3 const &rotation);
+	void		buildModelMatrix(void);
+	glm::mat4	const &getModelMatrix(void) const;
+	std::ostream	&printVertices(std::ostream &o) const;
 
 private :
 	Model(void);
@@ -49,7 +55,10 @@ private :
 	std::vector<Mesh>		_meshes;
 	std::string				_directory;
 	std::vector<Texture>	_textures_loaded;
-	SDL_Window				*_win;
+	glm::vec3				_translate;
+	glm::vec3				_scale;
+	glm::vec3				_rotation;
+	glm::mat4				_model_matrix;
 };
 
 #endif
