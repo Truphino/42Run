@@ -6,7 +6,7 @@
 /*   By: trecomps <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/20 14:49:25 by trecomps          #+#    #+#             */
-/*   Updated: 2018/10/11 12:46:46 by trecomps         ###   ########.fr       */
+/*   Updated: 2018/10/11 16:10:10 by trecomps         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,11 +264,17 @@ void			Model::buildModelMatrix(void)
 	tmp_matrix = glm::scale(tmp_matrix, this->_scale);
 
 	this->_model_matrix = tmp_matrix;
+	this->_normal_matrix = glm::inverseTranspose(glm::mat3(tmp_matrix));
 }
 
 glm::mat4 const	&Model::getModelMatrix(void) const
 {
-	return(this->_model_matrix);
+	return (this->_model_matrix);
+}
+
+glm::mat3 const &Model::getNormalMatrix(void) const
+{
+	return (this->_normal_matrix);
 }
 
 Model::~Model(void)

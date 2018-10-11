@@ -6,7 +6,7 @@
 /*   By: trecomps <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/20 14:48:30 by trecomps          #+#    #+#             */
-/*   Updated: 2018/10/11 11:28:43 by trecomps         ###   ########.fr       */
+/*   Updated: 2018/10/11 16:09:03 by trecomps         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ public :
 									glm::vec3 const &rotation);
 	void		buildModelMatrix(void);
 	glm::mat4	const &getModelMatrix(void) const;
+	glm::mat3	const &getNormalMatrix(void) const;
 	std::ostream	&printVertices(std::ostream &o) const;
 	void			addTransformation(glm::vec3 const &transformation, transformation_type t);
 
@@ -66,6 +67,7 @@ private :
 	glm::vec3				_scale;
 	glm::vec3				_rotation;
 	glm::mat4				_model_matrix;
+	glm::mat3				_normal_matrix;
 };
 
 #endif

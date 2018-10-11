@@ -6,7 +6,7 @@
 /*   By: trecomps <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/19 14:25:18 by trecomps          #+#    #+#             */
-/*   Updated: 2018/10/11 12:03:46 by trecomps         ###   ########.fr       */
+/*   Updated: 2018/10/11 16:22:04 by trecomps         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ SDL_Window		*init_sdl()
 	}
 	glClearColor(0.6, 0.6, 0.8, 1);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 	return (win);
 }
 
@@ -79,6 +80,7 @@ void	handle_key(Shader const &shader, Model &model, int key)
 		model.addTransformation(glm::vec3(-0.1, 0, 0), Model::ROTATION);
 	model.buildModelMatrix();
 	shader.setUniform("model_matrix", model.getModelMatrix());
+	shader.setUniform("normal_matrix", model.getNormalMatrix());
 }
 
 int		main(int argc, char **argv)
@@ -100,9 +102,12 @@ int		main(int argc, char **argv)
 		Model model(argv[1]);
 		model.setTransformations(glm::vec3(0, 0, -20), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
 		model.buildModelMatrix();
-		shader.setUniform("model_matrix",
-				model.getModelMatrix());
-//		const Uint8 *state = SDL_GetKeyboardState(NULL);
+		shader.setUniform("model_matrix", model.getModelMatrix());
+		shader.setUniform("normal_matrix", model.getNormalMatrix());
+		shader.setUniform("lightPos", glm::vec3(30, 0, 0));
+		shader.setUniform("lightColor", glm::vec3(5, 5, 5));
+		shader.setUniform("lightAmbient", 0.2f);
+		shader.setUniform("eyePos", glm::vec3(0, 0, 0));
 		double start = 0;
 		while (!quit)
 		{

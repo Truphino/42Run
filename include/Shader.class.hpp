@@ -6,7 +6,7 @@
 /*   By: trecomps <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/20 10:28:46 by trecomps          #+#    #+#             */
-/*   Updated: 2018/10/03 11:31:15 by trecomps         ###   ########.fr       */
+/*   Updated: 2018/10/11 15:48:17 by trecomps         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ public :
 	void				setUniform(const std::string &name, int value) const;
 	void				setUniform(const std::string &name, unsigned int value) const;
 	void				setUniform(const std::string &name, float value) const;
+	void				setUniform(const std::string &name, glm::vec3 value) const;
 	void				setUniform(const std::string &name, glm::mat4 value) const;
+	void				setUniform(const std::string &name, glm::mat3 value) const;
 	std::string			getVShaderCode() const;
 	std::string			getFShaderCode() const;
 

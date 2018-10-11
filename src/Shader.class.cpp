@@ -6,7 +6,7 @@
 /*   By: trecomps <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/20 10:29:27 by trecomps          #+#    #+#             */
-/*   Updated: 2018/10/04 11:53:59 by trecomps         ###   ########.fr       */
+/*   Updated: 2018/10/11 15:48:42 by trecomps         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,27 @@ void					Shader::setUniform(const std::string &name, float value) const
 	if (this->_inUse == 1)
 	{
 		glUniform1f(glGetUniformLocation(this->_id, name.c_str()), value);
+	}
+	else
+		std::cout << "Program not in use" << std::endl;
+}
+
+void					Shader::setUniform(const std::string &name, glm::vec3 value) const
+{
+	if (this->_inUse == 1)
+	{
+		glUniform3f(glGetUniformLocation(this->_id, name.c_str()), value.x, value.y, value.z);
+	}
+	else
+		std::cout << "Program not in use" << std::endl;
+}
+
+void					Shader::setUniform(const std::string &name, glm::mat3 value) const
+{
+	if (this->_inUse == 1)
+	{
+		glUniformMatrix3fv(glGetUniformLocation(this->_id, name.c_str()), 1,
+				GL_FALSE, glm::value_ptr(value));
 	}
 	else
 		std::cout << "Program not in use" << std::endl;
