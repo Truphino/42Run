@@ -6,7 +6,7 @@
 /*   By: trecomps <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/20 14:49:25 by trecomps          #+#    #+#             */
-/*   Updated: 2018/10/10 13:02:26 by trecomps         ###   ########.fr       */
+/*   Updated: 2018/10/11 12:46:46 by trecomps         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,11 +241,26 @@ void			Model::setTransformations(glm::vec3 const &translation,
 	this->_rotation = rotation;
 }
 
+void			Model::addTransformation(glm::vec3 const &transformation,
+		transformation_type toTransform)
+{
+	if (toTransform == TRANSLATION)
+		this->_translate += transformation;
+	if (toTransform == ROTATION)
+		this->_rotation += transformation;
+	if (toTransform == SCALING)
+		this->_scale += transformation;
+}
+
 void			Model::buildModelMatrix(void)
 {
 	glm::mat4	tmp_matrix(1.f);
+	glm::quat	myQuat(this->_rotation);
+	glm::mat4	rotationMatrix;
 
 	tmp_matrix = glm::translate(tmp_matrix, this->_translate);
+	rotationMatrix = glm::toMat4(myQuat);
+	tmp_matrix = tmp_matrix * rotationMatrix;
 	tmp_matrix = glm::scale(tmp_matrix, this->_scale);
 
 	this->_model_matrix = tmp_matrix;

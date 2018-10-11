@@ -6,7 +6,7 @@
 /*   By: trecomps <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/20 11:42:37 by trecomps          #+#    #+#             */
-/*   Updated: 2018/10/10 12:23:21 by trecomps         ###   ########.fr       */
+/*   Updated: 2018/10/11 13:07:06 by trecomps         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ void			Mesh::draw(const Shader &shader)
 			number = std::to_string(diffuseNr++);
 		if (name == "texture_specular")
 			number = std::to_string(specularNr++);
-		i++;
 		shader.setUniform(("material_" + name + number).c_str(), i);
 		glBindTexture(GL_TEXTURE_2D, this->_textures[i].id);
+		i++;
 	}
 	glBindVertexArray(this->_vao);
 	glDrawElements(GL_TRIANGLES, this->_indices.size(), GL_UNSIGNED_INT, 0);

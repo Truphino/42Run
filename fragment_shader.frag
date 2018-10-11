@@ -7,6 +7,7 @@ in vec3 frag_normal;
 out vec4 frag_colour;
 
 uniform sampler2D material_texture_diffuse1;
+uniform sampler2D material_texture_diffuse2;
 
 void main() {
 	vec4 surface_color;

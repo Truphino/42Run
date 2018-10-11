@@ -6,7 +6,7 @@
 /*   By: trecomps <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/19 14:25:18 by trecomps          #+#    #+#             */
-/*   Updated: 2018/10/10 14:03:33 by trecomps         ###   ########.fr       */
+/*   Updated: 2018/10/11 12:03:46 by trecomps         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,34 @@ SDL_Window		*init_sdl()
 		exit(1);
 	}
 	glClearColor(0.6, 0.6, 0.8, 1);
+	glEnable(GL_DEPTH_TEST);
 	return (win);
+}
+
+void	handle_key(Shader const &shader, Model &model, int key)
+{
+	if (key == SDLK_a)
+		model.addTransformation(glm::vec3(-1, 0, 0), Model::TRANSLATION);
+	else if (key == SDLK_d)
+		model.addTransformation(glm::vec3(1, 0, 0), Model::TRANSLATION);
+	else if (key == SDLK_w)
+		model.addTransformation(glm::vec3(0, 1, 0), Model::TRANSLATION);
+	else if (key == SDLK_s)
+		model.addTransformation(glm::vec3(0, -1, 0), Model::TRANSLATION);
+	else if (key == SDLK_f)
+		model.addTransformation(glm::vec3(0, 0, -1), Model::TRANSLATION);
+	else if (key == SDLK_g)
+		model.addTransformation(glm::vec3(0, 0, 1), Model::TRANSLATION);
+	else if (key == SDLK_LEFT)
+		model.addTransformation(glm::vec3(0, 0.1, 0), Model::ROTATION);
+	else if (key == SDLK_RIGHT)
+		model.addTransformation(glm::vec3(0, -0.1, 0), Model::ROTATION);
+	else if (key == SDLK_UP)
+		model.addTransformation(glm::vec3(0.1, 0, 0), Model::ROTATION);
+	else if (key == SDLK_DOWN)
+		model.addTransformation(glm::vec3(-0.1, 0, 0), Model::ROTATION);
+	model.buildModelMatrix();
+	shader.setUniform("model_matrix", model.getModelMatrix());
 }
 
 int		main(int argc, char **argv)
@@ -71,18 +98,23 @@ int		main(int argc, char **argv)
 		shader.setUniform("view_matrix",
 				glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, -1), glm::vec3(0, 1, 0)));
 		Model model(argv[1]);
-		model.setTransformations(glm::vec3(0, -5, -20), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
+		model.setTransformations(glm::vec3(0, 0, -20), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
 		model.buildModelMatrix();
 		shader.setUniform("model_matrix",
 				model.getModelMatrix());
+//		const Uint8 *state = SDL_GetKeyboardState(NULL);
+		double start = 0;
 		while (!quit)
 		{
+			start = clock();
+			model.draw(shader);
+			SDL_GL_SwapWindow(win);
 			while (SDL_PollEvent(&event))
 			{
-				if (event.type == SDL_QUIT || event.key.keysym.sym == SDLK_ESCAPE)
+				if (event.type == SDL_QUIT || SDL_KEY == SDLK_ESCAPE)
 					quit = 1;
-				model.draw(shader);
-				SDL_GL_SwapWindow(win);
+				if (event.type == SDL_KEYDOWN)
+					handle_key(shader, model, SDL_KEY);
 			}
 		}
 	}

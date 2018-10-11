@@ -213,7 +213,11 @@ obj/Model.class.o: src/Model.class.cpp include/Model.class.hpp \
   include/glm/./gtc/type_ptr.hpp \
   include/glm/./ext/../detail/../gtc/type_ptr.inl \
   include/glm/./gtc/ulp.hpp include/glm/./ext/../detail/../gtc/ulp.inl \
-  include/glm/./gtc/type_aligned.hpp include/Shader.class.hpp \
+  include/glm/./gtc/type_aligned.hpp include/glm/gtx/quaternion.hpp \
+  include/glm/gtx/../ext/quaternion_exponential.hpp \
+  include/glm/./ext/quaternion_exponential.inl \
+  include/glm/gtx/../gtx/norm.hpp include/glm/gtx/norm.inl \
+  include/glm/gtx/quaternion.inl include/Shader.class.hpp \
   include/assimp/Importer.hpp include/assimp/types.h \
   include/assimp/defs.h include/assimp/config.h include/assimp/vector3.h \
   include/assimp/vector2.h include/assimp/./Compiler/pushpack1.h \
